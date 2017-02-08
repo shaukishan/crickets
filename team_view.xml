@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Top Menu -->
+        <menuitem id="menu_cricket_team_top" name="Cricket Team" />
+
+
+        <!-- Submenu -->
+        <menuitem id="menu_cricket_team_submenu" name="Cricket Team" parent="menu_cricket_team_top"/>
+
+
+        <!-- Kanban View, Search View, Graph View, Calendar View, etc. -->
+
+        <!-- Form View -->
+        <record id="form_view_cricket_team" model="ir.ui.view">
+            <field name="name">Form View Cricket Team</field>
+            <field name="model">cricket.team</field>
+            <field name="arch" type="xml">
+                <form string="Cricket Team">
+                    <group>
+                        <field name="name" />
+                        <field name="players_count" />
+                        <field name="experience" />
+                        <field name="on_tour" />
+                    </group>
+                    <field name="players" />
+                </form>
+            </field>
+        </record>
+
+
+        <!-- Tree View -->
+        <record id="tree_view_cricket_team" model="ir.ui.view">
+            <field name="name">Tree View Cricket Team</field>
+            <field name="model">cricket.team</field>
+            <field name="arch" type="xml">
+                <tree string="Cricket Team">
+                    <field name="name" />
+                    <field name="players_count" />
+                    <field name="experience" />
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- Action -->
+        <record id="act_cricket_team" model="ir.actions.act_window">
+            <field name="name">Cricket Team</field>
+            <field name="res_model">cricket.team</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- Sub-submenu -->
+        <menuitem id="menu_cricket_team" name="Team" 
+            parent="menu_cricket_team_submenu"
+            action="act_cricket_team"
+            />
+
+
+        <!-- Form View -->
+        <!-- <record id="form_view_cricket_players" model="ir.ui.view">
+            <field name="name">Form View Cricket Players</field>
+            <field name="model">cricket.player</field>
+            <field name="arch" type="xml">
+                <form string="Cricket Team Player">
+                    <group>
+                        <field name="name" />
+                        <field name="team" />
+                        <field name="dob" />
+                        <field name="age" />
+                        <field name="contact_no" />
+                    </group>
+                </form>
+            </field>
+        </record> -->
+
+
+        <!-- Tree View -->
+<!--         <record id="tree_view_cricket_player" model="ir.ui.view">
+            <field name="name">Tree View Cricket Player</field>
+            <field name="model">cricket.player</field>
+            <field name="arch" type="xml">
+                <tree string="Cricket Player">
+                    <field name="name" />
+                    <field name="team" />
+                    <field name="age" />
+                </tree>
+            </field>
+        </record> -->
+
+
+        <record id="view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">Inherited Partner Form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <!-- after, before, inside, replace -->
+                    <field name="is_player"/>
+                    <field name="team" attrs="{'required': [('is_player', '=', True)],'invisible': [('is_player', '=', False)]}"/> 
+                    <!-- required, readonly, invisible -->
+                    <field name="dob" attrs="{'invisible': [('is_player', '=', False)]}"/>
+                    <field name="age" attrs="{'invisible': [('is_player', '=', False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="act_cricket_player" model="ir.actions.act_window">
+            <field name="name">Cricket Player</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_player', '=', True)]</field>
+            <field name="context">{'default_is_player': 1}</field>
+        </record>
+
+
+        <menuitem id="menu_cricket_player" name="Player" 
+            parent="menu_cricket_team_submenu"
+            action="act_cricket_player"
+            />
+
+
+    </data>
+</odoo>
